@@ -24,3 +24,27 @@ dist-ssr
 *.sw?
 # React frontend build
 frontend/build/
+# Node / Backend
+node_modules/
+dist/
+.env
+npm-debug.log*
+
+# React / Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env
+
+# Logs
+logs
+*.log
+
+# Editor & system files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
