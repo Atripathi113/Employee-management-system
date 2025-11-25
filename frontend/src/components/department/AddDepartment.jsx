@@ -32,7 +32,7 @@ const AddDepartment=() => {
                     alert (error.response.data.message);
             }
         
-        }
+        }}
     return(
         <div >
             <div className="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md w-96">
@@ -57,5 +57,5 @@ const AddDepartment=() => {
             </div>
         </div>
     )
-}}
+}
 export default AddDepartment;

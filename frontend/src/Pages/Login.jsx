@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 const Login = () => {
-    const [email,setEmail] = useState(" ");
+    const [email,setEmail] = useState("");
     const [password,setPassword] = useState('')
     const [error,setError] = React.useState(null);
     const {login} = useAuth();
@@ -21,7 +21,7 @@ const Login = () => {
       if(response.data.user.role === "admin"){
         navigate("/admin-dashboard");
     }else{
-        navigate("/user-dashboard");
+        navigate("/employee-dashboard");
     }}
   }}catch (error) {
     if(error.response && !error.response.data.success){

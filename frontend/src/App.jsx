@@ -7,6 +7,7 @@ import AdminSummary from "./components/dashboard/AdminSummary.jsx";
 import EmployeeDashboard from "./Pages/EmployeeDashboard.jsx";
 import Department from "./components/department/Department.jsx";
 import AddDepartment from "./components/department/AddDepartment.jsx";
+import Edit from "./components/department/Edit.jsx";
 
 
 function App() {
@@ -27,7 +28,8 @@ function App() {
 
                 <Route path="/employee-dashboard" element={<EmployeeDashboard />} ></Route>  
                 <Route path="/admin-dashboard/departments" element={<Department />} ></Route>
-                                <Route path="/admin-dashboard/add-department" element={<AddDepartment />} ></Route>
+                <Route path="/admin-dashboard/add-department" element={<AddDepartment />} ></Route>
+              <Route path="/admin-dashboard/department/:id" element={<Edit />} ></Route>
 
               
       </Routes>
