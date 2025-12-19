@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/AuthContext.jsx";
 import { Navigate } from "react-router-dom";
 
 
@@ -10,7 +10,7 @@ const RollBaseRoutes = ({ children, requiredRole }) => {
         return <div>Loading...</div>;
     }
     if(!requiredRole.includes(user.role)){
-        <Navigate to ="/unauthorized"/>;
+        return <Navigate to ="/unauthorized"/>;
     }
     return user ? children : <Navigate to ="/login"/>;
 }

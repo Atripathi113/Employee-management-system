@@ -8,6 +8,7 @@ import authRouter from "./routes/auth.js";
 import { connect } from "http2";
 import connectToDatabase from "./config/db.js"
 import departmentRouter from "./routes/department.js";
+import employeeRouter from "./routes/employee.js";
 dotenv.config();
 connectToDatabase();
 const app = express();
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/department', departmentRouter);
+app.use('/api/employee', employeeRouter);
 // MongoDB connection (example)
 /*mongoose.connect("mongodb://localhost:27017/yourDatabaseName", {
   

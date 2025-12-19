@@ -8,34 +8,45 @@ import EmployeeDashboard from "./Pages/EmployeeDashboard.jsx";
 import Department from "./components/department/Department.jsx";
 import AddDepartment from "./components/department/AddDepartment.jsx";
 import Edit from "./components/department/Edit.jsx";
-
+import List from "./components/employee/List.jsx";
+import Add from "./components/employee/Add.jsx";
 
 function App() {
-
-  return (<>
-     <BrowserRouter>
+  return (
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/admin-dashboard" />} />
+
+        {/* Default route → show Login */}
+        <Route path="/" element={<Navigate to="/login" />} />
+
         <Route path="/login" element={<Login />} />
-        <Route path="/admin-dashboard/*" element={
-          <PrivateRoutes>
-            <RollBaseRoutes requiredRole={["admin"]}>
-              <AdminDashboard />
+
+        {/* ADMIN ROUTES (Protected + Role-based) */}
+        <Route
+          path="/admin-dashboard/*"
+          element={
+            <PrivateRoutes>
+              <RollBaseRoutes requiredRole={["admin"]}>
+                <AdminDashboard />
               </RollBaseRoutes>
-              </PrivateRoutes>} />
-              <Route index element={<AdminSummary />} ></Route>
-                            <Route path="/admin-dashboard/departments" element={<AdminSummary />} ></Route>
+            </PrivateRoutes>
+          }
+        >
+          {/* Admin nested routes */}
+          <Route index element={<AdminSummary />} />
+          <Route path="departments" element={<Department />} />
+          <Route path="add-department" element={<AddDepartment />} />
+          <Route path="department/:id" element={<Edit />} />
+          <Route path="employees" element={<List />} />
+          <Route path="add-employee" element={<Add />} />
+        </Route>
 
-                <Route path="/employee-dashboard" element={<EmployeeDashboard />} ></Route>  
-                <Route path="/admin-dashboard/departments" element={<Department />} ></Route>
-                <Route path="/admin-dashboard/add-department" element={<AddDepartment />} ></Route>
-              <Route path="/admin-dashboard/department/:id" element={<Edit />} ></Route>
+        {/* Employee Dashboard */}
+        <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
 
-              
       </Routes>
     </BrowserRouter>
-  </>
   );
 }
 
-export default App
+export default App;
