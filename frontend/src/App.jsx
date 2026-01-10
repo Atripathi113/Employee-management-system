@@ -39,6 +39,8 @@ function App() {
           <Route path="department/:id" element={<Edit />} />
           <Route path="employees" element={<List />} />
           <Route path="add-employee" element={<Add />} />
+                    <Route path="add-employee" element={<Add />} />
+          <Route path="employee/:id" element={<View />} />
         </Route>
 
         {/* Employee Dashboard */}

@@ -1,9 +1,9 @@
 import express from 'express';
 import authMiddleware from '../middleware/authMiddleware.js';
-import { addEmployee,upload} from '../controllers/departmentController.js';
+import { addEmployee,upload,getEmployees} from '../controllers/departmentController.js';
 
 const router = express.Router();    
- //router.get('/', authMiddleware, getDepartments);
+ router.get('/', authMiddleware, getEmployees);
 router.post('/add', authMiddleware,upload.single('profileImage'), addEmployee);
 //router.get('/:id', authMiddleware, getDepartment);
 //router.put('/:id', authMiddleware, updateDepartment);

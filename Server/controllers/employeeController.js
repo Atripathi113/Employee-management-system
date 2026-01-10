@@ -1,5 +1,5 @@
-import Employee from "../models/Employee";
-import User from "../models/User";
+import Employee from "../models/Employee.js";
+import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 
 const storage = multer.diskStorage({
@@ -61,6 +61,15 @@ const addEmployee = async (req, res) => {
     console.error("Error adding employee:", error);
     res.status(500).json({ success: false, message: "Server Error" });
 }};
+const getEmployees = async (req, res) => {
+    try {
+        const employees = await Employee.find().populate('department').populate('userId', 'name email profileImage');
 
+        res.status(200).json({ success: true, employees });
+    } catch (error) {
+        console.error("Error fetching employees:", error);
+        res.status(500).json({ success: false, message: "Server Error" });
+    }
+};
 
-export { addEmployee , upload};
+export { addEmployee , upload, getEmployees};
