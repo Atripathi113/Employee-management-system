@@ -9,6 +9,7 @@ import { connect } from "http2";
 import connectToDatabase from "./config/db.js"
 import departmentRouter from "./routes/department.js";
 import employeeRouter from "./routes/employee.js";
+import salaryRouter from "./routes/salary.js";
 dotenv.config();
 connectToDatabase();
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.static('public/uploads'));
 app.use('/api/auth', authRouter);
 app.use('/api/department', departmentRouter);
 app.use('/api/employee', employeeRouter);
+app.use('/api/salary', salaryRouter);
 // MongoDB connection (example)
 /*mongoose.connect("mongodb://localhost:27017/yourDatabaseName", {
   

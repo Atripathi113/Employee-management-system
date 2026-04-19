@@ -25,7 +25,7 @@ export const columns = [
         name:"DOB",
         selector:(row) => row.dob,
         sortable: true,
-    }{
+    },{
         name:"Action",
         selector:(row) => row.action,
     }
@@ -34,7 +34,36 @@ export const columns = [
 
 
 
- export const fetchDepartments = async () => {
+ export const getEmployees = async (id) => {
+
+    let employees = [];
+   
+            
+        try{
+            const response = await axios.get(`http://localhost:5000/api/employee/department/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                }
+            }); 
+            if(response.data.success){
+                employees = response.data.employees.map((emp, index) => ({
+                    sno: index + 1,
+                    _id: emp._id,
+                    name: emp.userId.name,
+                    dept_name: emp.department.dept_name,
+                    dob: emp.dob
+                }));
+            }
+            // Handle the response data (to be implemented)
+        } catch (error){
+            if(error.response && !error.response.data.success){
+                alert(error.response.data.message);
+            }
+        }
+         return employees;
+    };
+
+     export const fetchDepartments = async () => {
 
     let departments = [];
    
@@ -57,7 +86,9 @@ export const columns = [
             }
         }
          return departments;
-    }
+    };
+    
+
 
     export const EmployeeButtons=({Id, })=>{
     const navigate= useNavigate();
@@ -68,8 +99,15 @@ export const columns = [
             <button className="bg-blue-500 text-white px-2 py-1 rounded mr-2" 
             onClick={() => navigate(`/admin-dashboard/employee/${Id}`)}>
                 view</button>
-                <button className="bg-blue-500 text-white px-3 py-1 ">Edit</button>
-                <button className="px-3 py-1 bg-green-600 text-white">Salary</button>
+                <button className="bg-blue-500 text-white px-3 py-1 "
+                onClick={() => navigate(`/admin-dashboard/employees/edit/${Id}`)}>
+                    Edit
+                </button>
+                <button className="px-3 py-1 bg-green-600 text-white" 
+                onClick={() => navigate(`/admin-dashboard/employees/salary/${Id}`)}>
+                    Salary
+                </button>
+
                 <button className="px-3 py-1 bg-red-600 text-white">Leave</button>
             
         </div>
