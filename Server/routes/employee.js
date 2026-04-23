@@ -1,6 +1,6 @@
 import express from 'express';
 import authMiddleware from '../middleware/authMiddleware.js';
-import { addEmployee,upload,getEmployees,getEmployee, updateEmployee, fetchEmployeesByDeptId} from '../controllers/departmentController.js';
+import { addEmployee,upload,getEmployees,getEmployee, updateEmployee, fetchEmployeesByDeptId} from '../controllers/employeeController.js';
 
 const router = express.Router(); 
 

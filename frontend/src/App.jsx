@@ -13,6 +13,10 @@ import Add from "./components/employee/Add.jsx";
 import AddSalary from "./components/salary/Add.jsx";
 import View from "./components/employee/View.jsx";
 import ViewSalary from "./components/salary/ViewSalary.jsx";
+import Summary from "./components/EmployeeDashboard/Summary.jsx";
+import LeaveList from "./components/leave/List.jsx";
+import LeaveAdd from "./components/leave/Add.jsx";
+import Setting from "./components/EmployeeDashboard/Setting.jsx";
 
 function App() {
   return (
@@ -50,7 +54,19 @@ function App() {
         </Route>
 
         {/* Employee Dashboard */}
-        <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+        <Route path="/employee-dashboard" element={
+          <PrivateRoutes>
+            <RollBaseRoutes requiredRole={["admin", "employee"]}>
+            <EmployeeDashboard />
+            </RollBaseRoutes>
+            </PrivateRoutes>} />
+           <Route index element={<Summary />} />
+           <Route path="employee-dashboard/profile/:id" element={<View />} />
+            <Route path="employee-dashboard/leaves" element={<LeaveList />} />
+            <Route path="employee-dashboard/add-leave" element={<LeaveAdd />} />
+            <Route path="employee-dashboard/salary/:id" element={<ViewSalary />} />
+            <Route path="employee-dashboard/setting" element={<Setting/>} />
+
 
       </Routes>
     </BrowserRouter>

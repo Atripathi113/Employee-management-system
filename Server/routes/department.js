@@ -1,8 +1,7 @@
 import express from 'express';
 import authMiddleware from '../middleware/authMiddleware.js';
 import { addDepartment ,getDepartments,getDepartment,deleteDepartment, updateDepartment} from '../controllers/departmentController.js';
-import { get } from 'mongoose';
-import e from 'express';
+
 
 const router = express.Router();    
  router.get('/', authMiddleware, getDepartments);
