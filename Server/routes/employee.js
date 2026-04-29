@@ -5,8 +5,8 @@ import { addEmployee,upload,getEmployees,getEmployee, updateEmployee, fetchEmplo
 const router = express.Router(); 
 
  router.get('/', authMiddleware, getEmployees);
-router.post('/add', authMiddleware,upload.single('profileImage'), addEmployee);
+router.post('/add', authMiddleware, upload.single('profileImage'), addEmployee);
 router.get('/:id', authMiddleware, getEmployee);
 router.put('/:id', authMiddleware, updateEmployee);
-router.get('/:id', authMiddleware, fetchEmployeesByDeptId);
+router.get('/department/:id', authMiddleware, fetchEmployeesByDeptId);
  export default router;

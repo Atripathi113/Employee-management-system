@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 import multer from "multer";
 import path from "path";
 
-// ================= MULTER =================
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -16,7 +15,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// ================= ADD EMPLOYEE =================
 const addEmployee = async (req, res) => {
   try {
     const {
@@ -55,7 +53,7 @@ const addEmployee = async (req, res) => {
 
     const employee = new Employee({
       userId: savedUser._id,
-      employeeId, // ✅ fixed typo
+      employeeId,
       maritalStatus,
       dob,
       gender,
@@ -73,11 +71,10 @@ const addEmployee = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding employee:", error);
-    res.status(500).json({ success: false, message: "Server Error" });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// ================= GET ALL =================
 const getEmployees = async (req, res) => {
   try {
     const employees = await Employee.find()
@@ -87,11 +84,10 @@ const getEmployees = async (req, res) => {
     res.status(200).json({ success: true, employees });
   } catch (error) {
     console.error("Error fetching employees:", error);
-    res.status(500).json({ success: false, message: "Server Error" });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// ================= GET ONE =================
 const getEmployee = async (req, res) => {
   const { id } = req.params;
 
@@ -103,11 +99,10 @@ const getEmployee = async (req, res) => {
     return res.status(200).json({ success: true, employee });
   } catch (error) {
     console.error("Error fetching employee:", error);
-    return res.status(500).json({ success: false, message: "Server Error" });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// ================= UPDATE =================
 const updateEmployee = async (req, res) => {
   try {
     const { id } = req.params;
@@ -129,7 +124,6 @@ const updateEmployee = async (req, res) => {
       });
     }
 
-    // ✅ FIX: use User model, not user instance
     await User.findByIdAndUpdate(employee.userId, { name });
 
     const updatedEmployee = await Employee.findByIdAndUpdate(
@@ -147,11 +141,10 @@ const updateEmployee = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating employee:", error);
-    res.status(500).json({ success: false, message: "Server Error" });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// ================= FETCH BY DEPARTMENT =================
 const fetchEmployeesByDeptId = async (req, res) => {
   const { id } = req.params;
 
@@ -165,12 +158,11 @@ const fetchEmployeesByDeptId = async (req, res) => {
     console.error("Error fetching employees:", error);
     return res.status(500).json({
       success: false,
-      message: "Get Employees by Department ID Error",
+      message: error.message,
     });
   }
 };
 
-// ================= EXPORT =================
 export {
   addEmployee,
   upload,

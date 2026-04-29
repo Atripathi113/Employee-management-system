@@ -30,7 +30,7 @@ const AdminSidebar = () => {
                 <FaBuilding/>
                 <span>Department</span>
                 </NavLink>
-                <NavLink to="/admin-dashboard"
+                <NavLink to="/admin-dashboard/leaves"
                 className="flex items-center space-x-4 blocks py-2.5 px-4 rounded 
                 hover:bg-gray-700 hover:text-white 
                 transition duration-200">
@@ -44,7 +44,7 @@ const AdminSidebar = () => {
                 <FaMoneyBillWave/>
                 <span>Salary</span>
                 </NavLink>
-                <NavLink to="/admin-dashboard"
+                <NavLink to="/admin-dashboard/settings"
                 className="flex items-center space-x-4 blocks py-2.5 px-4 rounded 
                 hover:bg-gray-700 hover:text-white 
                 transition duration-200">

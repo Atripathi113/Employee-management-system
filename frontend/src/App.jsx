@@ -17,18 +17,19 @@ import Summary from "./components/EmployeeDashboard/Summary.jsx";
 import LeaveList from "./components/leave/List.jsx";
 import LeaveAdd from "./components/leave/Add.jsx";
 import Setting from "./components/EmployeeDashboard/Setting.jsx";
+import Table from "./components/leave/Table.jsx";
+import LeaveDetail from "./components/leave/LeaveDetail.jsx";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* Default route → show Login */}
+        {/* Default route */}
         <Route path="/" element={<Navigate to="/login" />} />
-
         <Route path="/login" element={<Login />} />
 
-        {/* ADMIN ROUTES (Protected + Role-based) */}
+        {/* ADMIN ROUTES */}
         <Route
           path="/admin-dashboard/*"
           element={
@@ -39,34 +40,43 @@ function App() {
             </PrivateRoutes>
           }
         >
-          {/* Admin nested routes */}
           <Route index element={<AdminSummary />} />
           <Route path="departments" element={<Department />} />
           <Route path="add-department" element={<AddDepartment />} />
           <Route path="department/:id" element={<Edit />} />
           <Route path="employees" element={<List />} />
           <Route path="add-employee" element={<Add />} />
-                    <Route path="add-employee" element={<Add />} />
           <Route path="employee/:id" element={<View />} />
           <Route path="employees/edit/:id" element={<Edit />} />
           <Route path="employees/salary/:id" element={<ViewSalary />} />
           <Route path="salary/add" element={<AddSalary />} />
+
+          {/* ✅ FIXED (relative paths) */}
+          <Route path="leaves" element={<Table />} />
+          <Route path="leaves/:id" element={<LeaveDetail />} />
+          <Route path="employees/leaves/:id" element={<LeaveList />} />
+          <Route path="settings" element={<Setting />} />
         </Route>
 
-        {/* Employee Dashboard */}
-        <Route path="/employee-dashboard" element={
-          <PrivateRoutes>
-            <RollBaseRoutes requiredRole={["admin", "employee"]}>
-            <EmployeeDashboard />
-            </RollBaseRoutes>
-            </PrivateRoutes>} />
-           <Route index element={<Summary />} />
-           <Route path="employee-dashboard/profile/:id" element={<View />} />
-            <Route path="employee-dashboard/leaves" element={<LeaveList />} />
-            <Route path="employee-dashboard/add-leave" element={<LeaveAdd />} />
-            <Route path="employee-dashboard/salary/:id" element={<ViewSalary />} />
-            <Route path="employee-dashboard/setting" element={<Setting/>} />
-
+        {/* EMPLOYEE ROUTES */}
+        <Route
+          path="/employee-dashboard/*"
+          element={
+            <PrivateRoutes>
+              <RollBaseRoutes requiredRole={["admin", "employee"]}>
+                <EmployeeDashboard />
+              </RollBaseRoutes>
+            </PrivateRoutes>
+          }
+        >
+          {/* ✅ FIXED (proper nesting) */}
+          <Route index element={<Summary />} />
+          <Route path="profile/:id" element={<View />} />
+          <Route path="leaves" element={<LeaveList />} />
+          <Route path="add-leave" element={<LeaveAdd />} />
+          <Route path="salary/:id" element={<ViewSalary />} />
+          <Route path="setting" element={<Setting />} />
+        </Route>
 
       </Routes>
     </BrowserRouter>
