@@ -5,10 +5,9 @@ import { fetchDepartments, getEmployees } from "../../utilities/EmployeeHelper";
 
 const Add = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
 
   const [salary, setSalary] = useState({
-    EmployeeId: "",
+    employeeId: "",   // Fix 1: lowercase to match backend
     basicSalary: 0,
     allowances: 0,
     deductions: 0,
@@ -18,7 +17,6 @@ const Add = () => {
   const [departments, setDepartments] = useState([]);
   const [employees, setEmployees] = useState([]);
 
-  // Fetch departments
   useEffect(() => {
     const getDepartments = async () => {
       const deps = await fetchDepartments();
@@ -27,28 +25,22 @@ const Add = () => {
     getDepartments();
   }, []);
 
-  // Handle department change
   const handleDepartment = async (e) => {
     const emps = await getEmployees(e.target.value);
     setEmployees(emps);
   };
 
-  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSalary((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setSalary((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
+      // Fix 2: removed /${id} — no param needed on add route
       const response = await axios.post(
-        `http://localhost:5000/api/salary/add/${id}`,
+        `http://localhost:5000/api/salary/add`,
         salary,
         {
           headers: {
@@ -57,7 +49,8 @@ const Add = () => {
         }
       );
 
-      if (response.data.success) {
+      // Fix 3: backend returns { message } not { success } — check message
+      if (response.status === 201) {
         navigate("/admin-dashboard/employees");
       }
     } catch (error) {
@@ -68,24 +61,24 @@ const Add = () => {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-100 p-8">
       {departments.length > 0 ? (
-        <div className="w-full bg-white p-6 rounded-lg shadow">
-          <h2 className="text-2xl font-semibold mb-6 text-center">
-            Add Salary
-          </h2>
+        <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
 
-          <form
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            onSubmit={handleSubmit}
-          >
+          {/* Header */}
+          <div className="bg-teal-600 px-8 py-5">
+            <h2 className="text-xl font-bold text-white text-center">Add Salary</h2>
+          </div>
+
+          <form className="p-8 grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
+
             {/* Department */}
             <div className="col-span-2">
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                 Department
               </label>
               <select
-                className="w-full border p-2 rounded"
+                className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-700 focus:outline-none focus:border-teal-500"
                 onChange={handleDepartment}
                 required
               >
@@ -100,19 +93,19 @@ const Add = () => {
 
             {/* Employee */}
             <div className="col-span-2">
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                 Employee
               </label>
               <select
-                name="EmployeeId"
-                className="w-full border p-2 rounded"
+                name="employeeId"
+                className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-700 focus:outline-none focus:border-teal-500"
                 onChange={handleChange}
                 required
               >
                 <option value="">Select Employee</option>
                 {employees.map((emp) => (
                   <option key={emp._id} value={emp._id}>
-                    {emp.userId.name}
+                    {emp.name}
                   </option>
                 ))}
               </select>
@@ -120,7 +113,7 @@ const Add = () => {
 
             {/* Basic Salary */}
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                 Basic Salary
               </label>
               <input
@@ -128,14 +121,14 @@ const Add = () => {
                 name="basicSalary"
                 value={salary.basicSalary}
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="w-full border border-gray-300 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
                 required
               />
             </div>
 
             {/* Allowances */}
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                 Allowances
               </label>
               <input
@@ -143,14 +136,14 @@ const Add = () => {
                 name="allowances"
                 value={salary.allowances}
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="w-full border border-gray-300 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
                 required
               />
             </div>
 
             {/* Deductions */}
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                 Deductions
               </label>
               <input
@@ -158,14 +151,14 @@ const Add = () => {
                 name="deductions"
                 value={salary.deductions}
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="w-full border border-gray-300 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
                 required
               />
             </div>
 
             {/* Pay Date */}
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                 Pay Date
               </label>
               <input
@@ -173,28 +166,29 @@ const Add = () => {
                 name="payDate"
                 value={salary.payDate}
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="w-full border border-gray-300 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
                 required
               />
             </div>
 
             {/* Submit */}
-            <div className="col-span-2 mt-4">
+            <div className="col-span-2">
               <button
                 type="submit"
-                className="w-full bg-green-600 text-white p-3 rounded-lg"
+                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200"
               >
                 Add Salary
               </button>
             </div>
+
           </form>
         </div>
       ) : (
-        <div className="w-full bg-white p-6 rounded-lg shadow text-center">
+        <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md text-center text-gray-500">
           Loading...
         </div>
       )}
-    </>
+    </div>
   );
 };
 

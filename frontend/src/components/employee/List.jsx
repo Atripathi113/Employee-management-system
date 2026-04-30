@@ -29,10 +29,10 @@ const List = () => {
             serialNumber: sno++,
             dept_name: emp.department?.dept_name,
             name: emp.userId?.name,
-            dob: new Date(emp.dob).toDateString(),
+            dob: new Date(emp.dob).toLocaleDateString("en-GB"),
             profileImage: (
               <img
-                src={`http://localhost:5000/public/uploads/${emp.userId?.profileImage}`}
+                src={`http://localhost:5000/uploads/${emp.userId?.profileImage}`}
                 alt="Profile"
                 className="w-10 h-10 rounded-full"
               />

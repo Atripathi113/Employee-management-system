@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Employee from "./Employee";
-import Leave from "./Leave";
+import Employee from "./Employee.js";
+import Leave from "./Leave.js";
 import Salary from "./Salary.js"
 
 const departmentSchema = new mongoose.Schema({

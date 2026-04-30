@@ -1,6 +1,6 @@
 import express from 'express';
 import authMiddleware from '../middleware/authMiddleware.js';
-import { addEmployee,upload,getEmployees,getEmployee, updateEmployee, fetchEmployeesByDeptId} from '../controllers/employeeController.js';
+import { addEmployee,upload,getEmployees,getEmployee, updateEmployee, fetchEmployeesByDeptId,deleteEmployee} from '../controllers/employeeController.js';
 
 const router = express.Router(); 
 
@@ -9,4 +9,7 @@ router.post('/add', authMiddleware, upload.single('profileImage'), addEmployee);
 router.get('/:id', authMiddleware, getEmployee);
 router.put('/:id', authMiddleware, updateEmployee);
 router.get('/department/:id', authMiddleware, fetchEmployeesByDeptId);
+router.delete('/:id', authMiddleware, deleteEmployee);
+
+
  export default router;

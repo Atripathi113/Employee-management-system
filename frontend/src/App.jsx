@@ -19,17 +19,20 @@ import LeaveAdd from "./components/leave/Add.jsx";
 import Setting from "./components/EmployeeDashboard/Setting.jsx";
 import Table from "./components/leave/Table.jsx";
 import LeaveDetail from "./components/leave/LeaveDetail.jsx";
+import EditEmployee from "./components/employee/Edit.jsx";
+import Attendance from "./components/attendance/Attendance.jsx";
+import AttendanceReport from "./components/attendance/AttendanceReport.jsx";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* Default route */}
+       
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
 
-        {/* ADMIN ROUTES */}
+        
         <Route
           path="/admin-dashboard/*"
           element={
@@ -47,18 +50,20 @@ function App() {
           <Route path="employees" element={<List />} />
           <Route path="add-employee" element={<Add />} />
           <Route path="employee/:id" element={<View />} />
-          <Route path="employees/edit/:id" element={<Edit />} />
+          <Route path="employees/edit/:id" element={<EditEmployee />} />
           <Route path="employees/salary/:id" element={<ViewSalary />} />
           <Route path="salary/add" element={<AddSalary />} />
 
-          {/* ✅ FIXED (relative paths) */}
+          
           <Route path="leaves" element={<Table />} />
           <Route path="leaves/:id" element={<LeaveDetail />} />
           <Route path="employees/leaves/:id" element={<LeaveList />} />
           <Route path="settings" element={<Setting />} />
+          <Route path="attendance" element={<Attendance />} />
+           <Route path="attendance-report" element={<AttendanceReport />} />
         </Route>
 
-        {/* EMPLOYEE ROUTES */}
+        
         <Route
           path="/employee-dashboard/*"
           element={
@@ -69,13 +74,13 @@ function App() {
             </PrivateRoutes>
           }
         >
-          {/* ✅ FIXED (proper nesting) */}
+          
           <Route index element={<Summary />} />
           <Route path="profile/:id" element={<View />} />
-          <Route path="leaves" element={<LeaveList />} />
+          <Route path="leaves/:id" element={<LeaveList />} />
           <Route path="add-leave" element={<LeaveAdd />} />
           <Route path="salary/:id" element={<ViewSalary />} />
-          <Route path="setting" element={<Setting />} />
+          <Route path="settings" element={<Setting />} />
         </Route>
 
       </Routes>

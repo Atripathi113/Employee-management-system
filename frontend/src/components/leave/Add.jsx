@@ -8,9 +8,10 @@ const Add = () => {
   const navigate = useNavigate();
 
   const [leave, setLeave] = useState({
-    userId: user?._id,
+    userId: user._id,       // user is guaranteed by ProtectedRoute, safe to access directly
     leaveType: "",
     startDate: "",
+    endDate: "",
     reason: "",
   });
 
@@ -21,10 +22,17 @@ const Add = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Fix 2: date validation
+    if (new Date(leave.startDate) > new Date(leave.endDate)) {
+      alert("Start date cannot be after end date.");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/leave/add",
-        leave, // ✅ sending data
+        leave,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -33,7 +41,7 @@ const Add = () => {
       );
 
       if (response.data.success) {
-        navigate("/leaves");
+        navigate(`/employee-dashboard/leaves/${user._id}`);
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
@@ -43,19 +51,25 @@ const Add = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Request for Leave</h2>
+    <div className="min-h-screen bg-gray-900 p-8">
+      <div className="max-w-2xl mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden">
 
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col space-y-4">
+        {/* Header */}
+        <div className="bg-teal-600 px-8 py-5">
+          <h2 className="text-xl font-bold text-white text-center">Request for Leave</h2>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-8 flex flex-col space-y-5">
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
               Leave Type
             </label>
             <select
               name="leaveType"
+              value={leave.leaveType}
               onChange={handleChange}
-              className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+              className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg p-2.5 focus:outline-none focus:border-teal-500"
               required
             >
               <option value="">Select Leave Type</option>
@@ -65,39 +79,60 @@ const Add = () => {
             </select>
           </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
+                From Date
+              </label>
+              <input
+                type="date"
+                name="startDate"
+                value={leave.startDate}
+                onChange={handleChange}
+                className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg p-2.5 focus:outline-none focus:border-teal-500"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
+                To Date
+              </label>
+              <input
+                type="date"
+                name="endDate"
+                value={leave.endDate}
+                onChange={handleChange}
+                className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg p-2.5 focus:outline-none focus:border-teal-500"
+                required
+              />
+            </div>
+          </div>
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              From Date
+            <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
+              Reason
             </label>
-            <input
-              type="date"
-              name="startDate"
+            {/* Fix 3: added value prop — now fully controlled */}
+            <textarea
+              name="reason"
+              value={leave.reason}
+              placeholder="Enter reason for leave"
               onChange={handleChange}
-              className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-              required
+              rows={4}
+              className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg p-2.5 focus:outline-none focus:border-teal-500 resize-none"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Description
-            </label>
-            <textarea
-              name="reason"
-              placeholder="Reason"
-              onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded-md"
-            ></textarea>
-          </div>
-        </div>
+          <button
+            type="submit"
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200"
+          >
+            Add Leave
+          </button>
 
-        <button
-          type="submit"
-          className="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Add Leave
-        </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

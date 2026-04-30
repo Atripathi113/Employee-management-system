@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 const ViewSalary = () => {
   const [salaries, setSalaries] = useState([]);
   const [filteredSalaries, setFilteredSalaries] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  
+  const {user} =useAuth();
 
   const fetchSalaries = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/salary/${id}`,
+        `http://localhost:5000/api/salary/${id}/${user.role}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -26,8 +30,10 @@ const ViewSalary = () => {
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
-        alert(error.message);
+        alert(error.response.data.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,8 +57,10 @@ const ViewSalary = () => {
 
   return (
     <>
-      {filteredSalaries === null ? (
+      {loading ? (
         <div>Loading...</div>
+      ) : filteredSalaries.length === 0 ? (
+        <div>No salary records found.</div>
       ) : (
         <div className="overflow-x-auto p-5">
           <div className="text-center">

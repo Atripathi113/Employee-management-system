@@ -15,7 +15,7 @@ const authMiddleware = async (req, res, next) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    req.user = user;
+     req.user = { ...user._doc, userId: decoded.userId, role: decoded.role };
     next();
   } catch (error) {
     // Handle JWT-specific errors with 401 instead of 500

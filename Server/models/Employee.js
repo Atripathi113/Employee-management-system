@@ -4,7 +4,7 @@ import { Schema } from "mongoose";
 const employeeSchema = new Schema ({
 
 userId: { type: Schema. Types.ObjectId, ref: "User", required: true },
-employeeld: { type: String, required: true, unique: true },
+employeeId: { type: String, required: true, unique: true },
 dob: { type: Date },
 gender: { type: String},
 maritalStatus: { type: String},

@@ -3,6 +3,9 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import multer from "multer";
 import path from "path";
+import Salary from "../models/Salary.js";
+import Leave from "../models/Leave.js";
+import Attendance from "../models/Attendance.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -43,10 +46,11 @@ const addEmployee = async (req, res) => {
 
     const newUser = new User({
       name,
-      email,
-      password: hashedPassword,
-      role,
-      profileImage: req.file ? req.file.filename : null,
+  username: email.split("@")[0],   
+  email,
+  password: hashedPassword,
+  role: role.toLowerCase(),        
+  profileImage: req.file ? req.file.filename : null
     });
 
     const savedUser = await newUser.save();
@@ -71,7 +75,7 @@ const addEmployee = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding employee:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -84,7 +88,7 @@ const getEmployees = async (req, res) => {
     res.status(200).json({ success: true, employees });
   } catch (error) {
     console.error("Error fetching employees:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -134,14 +138,14 @@ const updateEmployee = async (req, res) => {
       .populate("department")
       .populate("userId", "name email profileImage");
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Employee updated successfully",
       employee: updatedEmployee,
     });
   } catch (error) {
     console.error("Error updating employee:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -163,6 +167,28 @@ const fetchEmployeesByDeptId = async (req, res) => {
   }
 };
 
+const deleteEmployee = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const employee = await Employee.findById(id);
+    if (!employee) {
+      return res.status(404).json({ success: false, message: "Employee not found" });
+    }
+     await Promise.all([
+      Salary.deleteMany({ employeeId: id }),
+      Leave.deleteMany({ employeeId: id }),
+      Attendance.deleteMany({ employeeId: id }),
+      User.findByIdAndDelete(employee.userId),
+      Employee.findByIdAndDelete(id),
+    ]);
+     return res.status(200).json({ success: true, message: "Employee and all related records deleted" });
+  } catch (error) {
+    console.error("Error deleting employee:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export {
   addEmployee,
   upload,
@@ -170,4 +196,5 @@ export {
   getEmployee,
   updateEmployee,
   fetchEmployeesByDeptId,
+  deleteEmployee
 };

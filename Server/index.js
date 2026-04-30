@@ -1,11 +1,11 @@
 import express from "express";
+import fs from "fs";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
 import authRouter from "./routes/auth.js";
-
-import { connect } from "http2";
+import { fileURLToPath } from "url"; 
 import connectToDatabase from "./config/db.js"
 import departmentRouter from "./routes/department.js";
 import employeeRouter from "./routes/employee.js";
@@ -13,15 +13,21 @@ import salaryRouter from "./routes/salary.js";
 import leaveRouter from "./routes/leave.js";
 import settingRouter from "./routes/setting.js";
 import dashboardRouter from "./routes/dashboard.js";
+import attendanceRouter from "./routes/attendance.js";
 dotenv.config();
 connectToDatabase();
+const __filename = fileURLToPath(import.meta.url);  
+const __dirname = path.dirname(__filename);
+if (!fs.existsSync("uploads")) {
+    fs.mkdirSync("uploads");
+}
 const app = express();
 
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public/uploads'));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use('/api/auth', authRouter);
 app.use('/api/departments', departmentRouter);
 app.use('/api/employee', employeeRouter);
@@ -29,6 +35,7 @@ app.use('/api/salary', salaryRouter);
 app.use('/api/leave', leaveRouter);
 app.use ("/api/setting", settingRouter);
 app.use("/api/dashboard", dashboardRouter);
+app.use("/api/attendance", attendanceRouter);
 // MongoDB connection (example)
 /*mongoose.connect("mongodb://localhost:27017/yourDatabaseName", {
   
