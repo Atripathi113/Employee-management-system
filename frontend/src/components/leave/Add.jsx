@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "@utilities/Api"; 
 
 const Add = () => {
   const { user } = useAuth();
@@ -31,7 +32,7 @@ const Add = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/leave/add",
+        `${API_URL}/api/leave/add`,
         leave,
         {
           headers: {

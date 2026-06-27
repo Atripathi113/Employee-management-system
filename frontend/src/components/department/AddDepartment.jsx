@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
- 
+ import { API_URL } from "@utilities/Api";
+
 const AddDepartment = () => {
     const [department, setDepartment] = useState({
         dept_name: "",
@@ -20,7 +21,7 @@ const AddDepartment = () => {
 
         try {
             const response = await axios.post(
-                "http://localhost:5000/api/departments/add",
+                `${API_URL}/api/departments/add`,
                 department,
                 {
                     headers: {

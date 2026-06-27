@@ -49,3 +49,13 @@ logs
 *.sln
 *.sw?
 .env
+# Environment
+.env
+Server/.env
+
+# Dependencies
+node_modules/
+Server/node_modules/
+
+.env
+.env.local

@@ -50,7 +50,8 @@ const addEmployee = async (req, res) => {
   email,
   password: hashedPassword,
   role: role.toLowerCase(),        
-  profileImage: req.file ? req.file.filename : null
+  profileImage: req.file ? req.file.filename : null,
+   isArchived: false,
     });
 
     const savedUser = await newUser.save();
@@ -83,9 +84,17 @@ const getEmployees = async (req, res) => {
   try {
     const employees = await Employee.find()
       .populate("department")
-      .populate("userId", "name email profileImage");
+      .populate(
+        {
+        path: "userId",
+        match: { isArchived: false }, 
+        select: "name email profileImage isArchived",
+      }
+      );
 
-    res.status(200).json({ success: true, employees });
+    const activeEmployees = employees.filter((emp) => emp.userId !== null);
+
+    res.status(200).json({ success: true, employees: activeEmployees });
   } catch (error) {
     console.error("Error fetching employees:", error);
     return res.status(500).json({ success: false, message: error.message });
@@ -98,8 +107,15 @@ const getEmployee = async (req, res) => {
   try {
     const employee = await Employee.findById(id)
       .populate("department")
-      .populate("userId", { password: 0 });
+      .populate({
+        path: "userId",
+        match: { isArchived: false },
+        select: "name email profileImage",
+      });
 
+       if (!employee || employee.userId?.isArchived) {
+      return res.status(404).json({ success: false, message: "Employee not found" });
+    }
     return res.status(200).json({ success: true, employee });
   } catch (error) {
     console.error("Error fetching employee:", error);
@@ -117,6 +133,7 @@ const updateEmployee = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Employee not found",
+
       });
     }
 
@@ -136,7 +153,11 @@ const updateEmployee = async (req, res) => {
       { new: true }
     )
       .populate("department")
-      .populate("userId", "name email profileImage");
+      .populate({
+        path: "userId",
+        match: { isArchived: false },
+        select: "name email profileImage",
+      });
 
     return res.status(200).json({
       success: true,
@@ -155,7 +176,11 @@ const fetchEmployeesByDeptId = async (req, res) => {
   try {
     const employees = await Employee.find({ department: id })
       .populate("department")
-      .populate("userId", { password: 0 });
+      .populate({
+        path: "userId",
+        match: { isArchived: false },
+        select: "name email profileImage",
+      });
 
     return res.status(200).json({ success: true, employees });
   } catch (error) {
@@ -174,7 +199,10 @@ const deleteEmployee = async (req, res) => {
     const employee = await Employee.findById(id);
     if (!employee) {
       return res.status(404).json({ success: false, message: "Employee not found" });
+
     }
+         await User.findByIdAndUpdate(employee.userId, { isArchived: true });
+
      await Promise.all([
       Salary.deleteMany({ employeeId: id }),
       Leave.deleteMany({ employeeId: id }),

@@ -4,6 +4,8 @@ import {
   FaHourglassHalf, FaMoneyBillWave, FaTimesCircle, FaUsers,
 } from "react-icons/fa";
 import axios from "axios";
+import { API_URL } from "@utilities/Api";
+
 
 const SummaryCard = ({ icon, text, number, color }) => (
   <div className={`${color} rounded-xl p-4 flex items-center gap-4`}>
@@ -23,7 +25,7 @@ const AdminSummary = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/dashboard/summary", {
+        const res = await axios.get(`${API_URL}/api/dashboard/summary`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         setSummary(res.data);

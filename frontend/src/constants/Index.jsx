@@ -1,0 +1,1 @@
+export const DEFAULT_AVATAR = "https://ui-avatars.com/api/?background=0d9488&color=fff&name=Employee&size=128";

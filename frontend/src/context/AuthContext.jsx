@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { API_URL } from "@utilities/Api";
+
 
 
 const UserContext = createContext();
@@ -18,7 +20,7 @@ const AuthContext = ({ children }) => {
           return;
         }
 
-        const response = await axios.get("http://localhost:5000/api/auth/verify-user", {
+        const response = await axios.get(`${API_URL}/api/auth/verify-user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

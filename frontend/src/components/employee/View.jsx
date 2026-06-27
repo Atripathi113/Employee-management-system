@@ -2,6 +2,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "@utilities/Api";
+import { DEFAULT_AVATAR } from "../../constants/Index.jsx";
+import BackButton from "../../components/BackButton";
+
 
 const Field = ({ label, value }) => (
   <div className="flex flex-col gap-1">
@@ -28,7 +32,7 @@ const View = () => {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/employee/${id}`, {
+        const response = await axios.get(`${API_URL}/api/employee/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         if (response.data.success) {
@@ -53,23 +57,29 @@ const View = () => {
     </div>
   );
 
-  return (
+  
+  const profileImageUrl = employee.userId?.profileImage
+    ? `${API_URL}/uploads/${employee.userId.profileImage}`
+    : DEFAULT_AVATAR;
+
+  return ( 
     <div className="p-6 max-w-4xl mx-auto">
+      <BackButton />
       <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
 
-        {/* Header Banner */}
         <div className="bg-teal-600 px-8 py-5">
           <h2 className="text-xl font-bold text-white text-center tracking-wide">
             Employee Profile
           </h2>
         </div>
 
-        {/* Profile Hero */}
         <div className="flex flex-col sm:flex-row items-center gap-6 px-8 py-6 bg-gray-50 border-b border-gray-100">
           <img
-            src={`http://localhost:5000/uploads/${employee.userId.profileImage}`}
+            src={profileImageUrl}
             className="w-28 h-28 rounded-full object-cover border-4 border-teal-100 shadow-md"
-            alt={employee.userId.name}
+            alt={employee.userId?.name || "Employee"}
+            // Fix: second fallback if URL breaks
+            onError={(e) => { e.target.src = DEFAULT_AVATAR; }}
           />
           <div>
             <h3 className="text-2xl font-bold text-gray-800">{employee.userId.name}</h3>
@@ -85,10 +95,7 @@ const View = () => {
           </div>
         </div>
 
-        {/* Details */}
         <div className="px-8 py-6">
-
-          {/* Personal Information */}
           <Section title="Personal Information">
             <Field label="Full Name"      value={employee.userId.name} />
             <Field label="Email"          value={employee.userId.email} />
@@ -97,20 +104,17 @@ const View = () => {
             <Field label="Marital Status" value={employee.maritalStatus} />
           </Section>
 
-          {/* Employment Information */}
           <Section title="Employment Information">
-            <Field label="Employee ID"   value={employee.employeeId} />
-            <Field label="Designation"   value={employee.designation} />
-            <Field label="Department"    value={employee.department?.dept_name} />
-            <Field label="Salary"        value={employee.salary ? `₹${Number(employee.salary).toLocaleString()}` : "—"} />
+            <Field label="Employee ID"  value={employee.employeeId} />
+            <Field label="Designation"  value={employee.designation} />
+            <Field label="Department"   value={employee.department?.dept_name} />
+            <Field label="Salary"       value={employee.salary ? `₹${Number(employee.salary).toLocaleString()}` : "—"} />
           </Section>
 
-          {/* Account Information */}
           <Section title="Account Information">
-            <Field label="Username"  value={employee.userId.username} />
-            <Field label="Role"      value={employee.userId.role} />
+            <Field label="Username" value={employee.userId.username} />
+            <Field label="Role"     value={employee.userId.role} />
           </Section>
-
         </div>
       </div>
     </div>

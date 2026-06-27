@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "@utilities/Api";
+
 
 const Edit = () => {
     const { id } = useParams();
@@ -18,7 +20,7 @@ const Edit = () => {
             setDeptLoading(true);
             try {
                 const response = await axios.get(
-                    `http://localhost:5000/api/departments/${id}`, 
+                    `${API_URL}/api/departments/${id}`, 
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -53,7 +55,7 @@ const Edit = () => {
 
         try {
             const response = await axios.put(
-                `http://localhost:5000/api/departments/${id}`, 
+                `${API_URL}/api/departments/${id}`, 
                 department,
                 {
                     headers: {

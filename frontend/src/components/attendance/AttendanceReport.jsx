@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "@utilities/Api";
+
 
 const AttendanceReport = () => {
   const today = new Date().toISOString().split("T")[0];
@@ -14,7 +16,7 @@ const AttendanceReport = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/attendance/report?date=${date}&limit=${limit}&skip=${newSkip}`,
+        `${API_URL}/api/attendance/report?date=${date}&limit=${limit}&skip=${newSkip}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -4,6 +4,10 @@ import { useState } from 'react';
 import { fetchDepartments } from '../../utilities/EmployeeHelper.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from "@utilities/Api";
+import BackButton from "../../components/BackButton";
+
+
 
 const Edit = () => {
    const navigate=  useNavigate();
@@ -30,7 +34,7 @@ const Edit = () => {
    useEffect(() => { 
       const fetchEmployee = async () => {
          try{
-            const response = await axios.get(`http://localhost:5000/api/employee/${id}`, {
+            const response = await axios.get(`${API_URL}/api/employee/${id}`, {
                headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                }
@@ -68,7 +72,7 @@ const Edit = () => {
       e.preventDefault();
 
       try {
-         const response = await axios.put(`http://localhost:5000/api/employee/${id}`, employee, {
+         const response = await axios.put(`${API_URL}/api/employee/${id}`, employee, {
             headers: {
                Authorization: `Bearer ${localStorage.getItem("token")}`,
             }
@@ -87,6 +91,7 @@ const Edit = () => {
 
    return (
       <div className="w-full bg-white p-6 rounded-lg shadow">
+         <BackButton />
 
          <h2 className="text-2xl font-semibold mb-6 text-center">Edit Employee</h2>
 

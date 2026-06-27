@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { fetchDepartments } from '../../utilities/EmployeeHelper.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from "@utilities/Api";
+
 
 const Add = () => {
    const navigate = useNavigate();
@@ -36,7 +38,7 @@ const Add = () => {
       });
 
       try {
-         const response = await axios.post("http://localhost:5000/api/employee/add", formDataObj, {
+         const response = await axios.post(`${API_URL}/api/employee/add`, formDataObj, {
             headers: {
                Authorization: `Bearer ${localStorage.getItem("token")}`,
             }

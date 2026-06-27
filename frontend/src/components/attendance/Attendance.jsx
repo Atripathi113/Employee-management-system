@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "@utilities/Api";
 
 const Attendance = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Attendance = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/attendance?date=${today}`,
+        `${API_URL}/api/attendance?date=${today}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -49,7 +50,7 @@ const Attendance = () => {
   const markAttendance = async (employeeId, status) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/attendance/mark",
+        `${API_URL}/api/attendance/mark`,
         { employeeId, date: today, status },
         {
           headers: {

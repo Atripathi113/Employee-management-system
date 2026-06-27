@@ -1,6 +1,8 @@
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "@utilities/Api";
+
 
 export const columns = [
   { name: "S.no",       selector: (row) => row.sno,        width: "70px" },
@@ -16,7 +18,7 @@ export const columns = [
 export const getLeaves = async () => {
   let leaves = [];
   try {
-    const response = await axios.get("http://localhost:5000/api/leave", {
+    const response = await axios.get(`${API_URL}/api/leave`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     if (response.data.success) {

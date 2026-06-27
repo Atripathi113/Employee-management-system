@@ -2,12 +2,13 @@ import User from '../models/User.js';
 import Employee from '../models/Employee.js';   
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { ROLES } from '../constants/enums.js';
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
     if (!user) {
       return res.status(400).json({ success: false, message: "Invalid email or password" });
     }
@@ -16,6 +17,10 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ success: false, message: "Invalid email or password" });
     }
+
+    if (user.isArchived) {
+  return res.status(403).json({ success: false, message: "Account has been deactivated" });
+}
 
     // Fix: moved token generation after null check (it was before in original)
     let employeeId = null;
@@ -55,6 +60,10 @@ const verify = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
+     if (user.isArchived) {
+      return res.status(403).json({ success: false, message: "Account has been deactivated" });
+    }
+
 
     let employeeId = null;
     if (user.role === "employee") {

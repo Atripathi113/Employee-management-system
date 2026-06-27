@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { fetchDepartments, getEmployees } from "../../utilities/EmployeeHelper";
+import { API_URL } from "@utilities/Api";
 
 const Add = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const Add = () => {
     try {
       // Fix 2: removed /${id} — no param needed on add route
       const response = await axios.post(
-        `http://localhost:5000/api/salary/add`,
+        `${API_URL}/api/salary/add`,
         salary,
         {
           headers: {

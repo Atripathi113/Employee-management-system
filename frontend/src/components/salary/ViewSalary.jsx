@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import { API_URL } from "@utilities/Api";
+import BackButton from "../../components/BackButton";
+
 
 const ViewSalary = () => {
   const [salaries, setSalaries] = useState([]);
@@ -14,7 +17,7 @@ const ViewSalary = () => {
   const fetchSalaries = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/salary/${id}/${user.role}`,
+        `${API_URL}/api/salary/${id}/${user.role}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -57,6 +60,7 @@ const ViewSalary = () => {
 
   return (
     <>
+      <BackButton />
       {loading ? (
         <div>Loading...</div>
       ) : filteredSalaries.length === 0 ? (

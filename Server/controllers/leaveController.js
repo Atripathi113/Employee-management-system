@@ -1,5 +1,6 @@
 import Leave from '../models/Leave.js';
 import Employee from '../models/Employee.js';
+import { LEAVE_STATUS } from "../constants/enums.js";
 
 const addLeave = async (req, res) => {
     try {
@@ -20,7 +21,8 @@ const addLeave = async (req, res) => {
             leaveType,
             startDate,
             endDate,
-            reason
+            reason,
+            status: LEAVE_STATUS.PENDING
         });
         await newLeave.save();
         return res.status(201).json({ success: true, message: 'Leave added successfully', leave: newLeave });

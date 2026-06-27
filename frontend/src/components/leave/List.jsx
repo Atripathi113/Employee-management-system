@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import { API_URL } from "@utilities/Api";
+
 
 const List = () => {
   const { id } = useParams();
   const [leaves, setLeaves] = useState([]);
   const [filteredLeaves, setFilteredLeaves] = useState([]);
   const [loading, setLoading] = useState(true);
+  
   const { user } = useAuth();
   let sno = 1;
 
@@ -15,7 +18,7 @@ const List = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/leave/${id}/${user.role}`,
+        `${API_URL}/api/leave/${id}/${user.role}`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       if (response.data.success) {

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
+import { API_URL } from "@utilities/Api";
+
 
 const Setting = () => {
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ const Setting = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/setting/change-password",
+        `${API_URL}/api/setting/change-password`,
         setting,
         {
           headers: {

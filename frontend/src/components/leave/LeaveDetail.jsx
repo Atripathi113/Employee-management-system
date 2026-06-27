@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "@utilities/Api";
+import BackButton from "../BackButton";
+import { DEFAULT_AVATAR } from "../../constants/Index.jsx";
+
 
 const LeaveDetail = () => {
   const { id } = useParams();
@@ -11,7 +15,7 @@ const LeaveDetail = () => {
     const fetchLeave = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/leave/detail/${id}`,
+          `${API_URL}/api/leave/detail/${id}`,
           { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
         if (response.data.success) setLeave(response.data.leaves);
@@ -27,7 +31,7 @@ const LeaveDetail = () => {
   const changeStatus = async (leaveId, status) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/leave/${leaveId}`,
+        `${API_URL}/api/leave/${leaveId}`,
         { status },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
@@ -47,9 +51,10 @@ const LeaveDetail = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 bg-white rounded-2xl shadow-lg overflow-hidden">
-
+      
       {/* Header Banner */}
       <div className="bg-teal-600 px-8 py-5">
+        <BackButton />
         <h2 className="text-2xl font-bold text-white text-center tracking-wide">
           Leave Request Detail
         </h2>
@@ -60,7 +65,7 @@ const LeaveDetail = () => {
         {/* Employee Info — top section */}
         <div className="flex flex-col sm:flex-row items-center gap-6 mb-8 pb-8 border-b border-gray-100">
           <img
-            src={`http://localhost:5000/uploads/${leave?.employeeId?.userId?.profileImage}`}
+            src={`${API_URL}/uploads/${leave?.employeeId?.userId?.profileImage}`}
             className="w-24 h-24 rounded-full object-cover border-4 border-teal-100 shadow"
             alt="profile"
           />
